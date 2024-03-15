@@ -47,9 +47,9 @@ extension AppTheme on ThemeData
   Color get appBarNavigationColor => AppPreferences.isModeDark ? Colors.white12 : Colors.grey[200]!;
   Color get speedNavigationColor => AppPreferences.isModeDark ? Colors.white12 : Colors.grey[200]!;
 
-  //final
-  Color get primaryBackground => AppPreferences.isModeDark ? const Color(0xFF141414) : Colors.grey[200]!;
-  Color get secondaryBackground => AppPreferences.isModeDark ? const Color(0xFF22242a) : Colors.white;
+  //final Color(0xFF141414)
+  Color get primaryBackground => AppPreferences.isModeDark ? const Color(0xFF22242a) : Colors.grey[200]!;
+  Color get secondaryBackground => AppPreferences.isModeDark ? const Color(0xFF141414) : Colors.white;
   Color get btnBackground => AppPreferences.isModeDark ? const Color(0xFF4d4d4d) : const Color(0xFFE5E5E5);
   Color get iconsColors => AppPreferences.isModeDark ? const Color(0xFF045cc8) : Colors.black54;
   Color get loadingColors => AppPreferences.isModeDark ? const Color(0xFFf2f2f2) : Colors.blue;

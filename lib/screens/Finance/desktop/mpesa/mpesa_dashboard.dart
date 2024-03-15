@@ -365,7 +365,7 @@ var _swapcenterTitle;
       body: Row(
         children: [
           Container(
-            color: Theme.of(context).primaryBackground,
+            color: Theme.of(context).secondaryBackground,
             height: double.infinity,
             width: MediaQuery.of(context).size.width * .12,
             child:const DesktopSidebar(),
@@ -378,9 +378,15 @@ var _swapcenterTitle;
             child:Column(
               children: [
 
-                const DesktopTopNav(),
+                Container(
+                  color: Theme.of(context).secondaryBackground,
+                  child: const DesktopTopNav()),
 
-                const DeskMpesaStatistics(),
+                Container(
+                  color: Theme.of(context).secondaryBackground,
+                  child: const DeskMpesaStatistics()),
+                
+                const SizedBox(height: 10,),
 
               // *************************************** BODY CONTENT ******* BEGIN
               Expanded(
@@ -393,7 +399,7 @@ var _swapcenterTitle;
                       Container(
                         padding:const EdgeInsets.fromLTRB(20, 10, 20, 10),
                         child: Row(children: [
-                          const Text("MPESA TRANSACTIONS"),
+                          const Text("MOBILE TRANSACTIONS"),
                           const SizedBox(width: 40,),
 
                           Flexible(

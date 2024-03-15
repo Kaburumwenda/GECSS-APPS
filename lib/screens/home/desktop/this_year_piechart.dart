@@ -40,7 +40,7 @@ class _ThisYearPieChartState extends State<ThisYearPieChart> {
 
    Future<void> fetchData() async {
     var baseur = AdsType.baseurl;
-    //var token = storage.getItem('token');
+    var token = storage.getItem('token');
     String url = '$baseur/v1/reports/overall_statistics_totals_year';
     setState(() {
       _isLoading = true;
@@ -48,7 +48,7 @@ class _ThisYearPieChartState extends State<ThisYearPieChart> {
     final response = await http.get(Uri.parse(url),
             headers: {
               "Content-Type": "application/json",
-              //'Authorization': "token $token"
+              'Authorization': "token $token"
             },);
     
     var data = json.decode(response.body) as List;

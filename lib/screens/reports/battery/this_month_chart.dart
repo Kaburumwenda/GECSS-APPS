@@ -9,15 +9,15 @@ import 'package:localstorage/localstorage.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 
-class ThisMonthAreaChart extends StatefulWidget {
-  const ThisMonthAreaChart({super.key});
+class ThisMonthChart extends StatefulWidget {
+  const ThisMonthChart({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _ThisMonthAreaChartState createState() => _ThisMonthAreaChartState();
+  _ThisMonthChartState createState() => _ThisMonthChartState();
 }
 
-class _ThisMonthAreaChartState extends State<ThisMonthAreaChart> {
+class _ThisMonthChartState extends State<ThisMonthChart> {
   LocalStorage storage = LocalStorage('usertoken');
   List<DataPoint> _dataPoints = [];
   TooltipBehavior? _tooltipBehavior;
@@ -32,7 +32,7 @@ class _ThisMonthAreaChartState extends State<ThisMonthAreaChart> {
   void fetchDataFromApi() async {
     var baseur = AdsType.baseurl;
    var token = storage.getItem('token');
-    String url = '$baseur/v1/statistics/graph';
+    String url = '$baseur/v1/reports/battery_statistics/month';
     try {
       final response = await http.get(Uri.parse(url),
             headers: {
@@ -43,7 +43,7 @@ class _ThisMonthAreaChartState extends State<ThisMonthAreaChart> {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         List<DataPoint> dataPoints = List<DataPoint>.from(data.map((item) {
-          return DataPoint(item['day'], item['totals']);
+          return DataPoint(item['day'], item['swaps']);
         }));
         setState(() {
           _dataPoints = dataPoints;
@@ -64,7 +64,7 @@ class _ThisMonthAreaChartState extends State<ThisMonthAreaChart> {
       //padding: const EdgeInsets.all(5),
       child: _dataPoints.isNotEmpty
           ? SfCartesianChart(
-            title: ChartTitle(text: 'This Month Earning Analysis', textStyle: GoogleFonts.teko()),
+            title: ChartTitle(text: 'This Month BAT Swaps', textStyle: GoogleFonts.teko()),
             legend: const Legend(
               isVisible: true, position: LegendPosition.bottom ),
             zoomPanBehavior: ZoomPanBehavior(zoomMode: ZoomMode.xy),
@@ -107,13 +107,13 @@ class _ThisMonthAreaChartState extends State<ThisMonthAreaChart> {
               ],
               primaryXAxis: NumericAxis(
                 edgeLabelPlacement: EdgeLabelPlacement.shift, 
-                title: AxisTitle(text: 'Days', textStyle: const TextStyle(color:Colors.green, fontSize: 14))),
+                title: AxisTitle(text: 'Days of the month', textStyle: const TextStyle(color:Colors.green, fontSize: 14))),
               primaryYAxis: NumericAxis(
                 numberFormat: NumberFormat.compactCurrency(decimalDigits: 0, symbol: "" ),
                 // numberFormat: NumberFormat.compactSimpleCurrency(
                 // decimalDigits: 0, locale: 'en_KE'), 
                 labelFormat: '{value}', 
-                title: AxisTitle(text: 'Amount Earned in - KES', textStyle: const TextStyle(color:Colors.green, fontSize: 14)) ),
+                title: AxisTitle(text: 'Number of swaps', textStyle: const TextStyle(color:Colors.green, fontSize: 14)) ),
             )
 
           : Container(
@@ -131,7 +131,7 @@ class _ThisMonthAreaChartState extends State<ThisMonthAreaChart> {
 
 class DataPoint {
   final int date;
-  final double total;
+  final int total;
 
   DataPoint(this.date, this.total);
 }

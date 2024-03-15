@@ -365,7 +365,7 @@ class _DeskBatterySwapDashboardState extends State<DeskBatterySwapDashboard> {
     return Scaffold(
       body: Row(children: [
         Container(
-            color: Theme.of(context).primaryBackground,
+            color: Theme.of(context).secondaryBackground,
             height: double.infinity,
             width: MediaQuery.of(context).size.width * .12,
             child:const DesktopSidebar(),
@@ -376,7 +376,11 @@ class _DeskBatterySwapDashboardState extends State<DeskBatterySwapDashboard> {
           height: double.infinity,
           width: MediaQuery.of(context).size.width * .88,
           child: Column(children: [
-            const DesktopTopNav(),
+
+            Container(
+              padding: const EdgeInsets.only(bottom: 5),
+              color: Theme.of(context).secondaryBackground,
+              child: const DesktopTopNav()),
 
             Expanded(
               child: Container(

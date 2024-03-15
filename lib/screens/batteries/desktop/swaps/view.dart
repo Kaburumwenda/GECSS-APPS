@@ -157,7 +157,7 @@ class RecordView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                Text('Battery Code', style: TextStyle(
+                Text('Battery Serial', style: TextStyle(
                   fontSize: 14,
                   color: Theme.of(context).headTextColor
                 ),),

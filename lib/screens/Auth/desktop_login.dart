@@ -21,6 +21,7 @@ class DesktopLoginScreen extends StatefulWidget {
 class _DesktopLoginScreenState extends State<DesktopLoginScreen> {
 
   LocalStorage storage = LocalStorage('usertoken');
+  LocalStorage staffstorage = LocalStorage('staff');
   String _username = '';
   String _password = '';
 
@@ -52,19 +53,37 @@ class _DesktopLoginScreenState extends State<DesktopLoginScreen> {
           "Content-Type": "application/json",
         },
         body: json.encode({
-          "username": _username, 
+          "username": _username,
           "password": _password,
           }));
     var data = json.decode(response.body) as Map;
 
     if (data.containsKey("token")) {
         storage.setItem("token", data['token']);
+        var token = data['token'];
 
         Navigator.of(context).pop();
 
-        Navigator.of(context).push(MaterialPageRoute(
-        builder: (BuildContext context) => const HomeScreen(),
-        ));
+        // STAFF ACC VERIFY START
+        String staffurl = '$baseur/v1/staff/verify';
+        var respR = json.decode((
+        await http.get(Uri.parse(staffurl),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': "token $token",
+        }
+       )).body);
+       var role = respR['role']; 
+       if(role.length > 2){
+         staffstorage.setItem("role", role);
+
+          Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => const HomeScreen(),
+          ));
+       }
+        // STAFF ACC VERIFY END
+
+ 
       }
 
       if(data['non_field_errors'][0].length > 0 ){

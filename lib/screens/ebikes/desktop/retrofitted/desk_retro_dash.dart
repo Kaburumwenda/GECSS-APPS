@@ -4,13 +4,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:gecssmns/Apis/base_url.dart';
-import 'package:gecssmns/Models/battery.dart';
+import 'package:gecssmns/Models/motorcycle_retro.dart';
 import 'package:gecssmns/main.dart';
 import 'package:gecssmns/public/Desktop/sidebar.dart';
 import 'package:gecssmns/public/Desktop/topnavbar.dart';
-import 'package:gecssmns/screens/batteries/desktop/battery/create.dart';
-import 'package:gecssmns/screens/batteries/desktop/battery/update.dart';
-import 'package:gecssmns/screens/batteries/desktop/battery/view.dart';
+import 'package:gecssmns/screens/ebikes/desktop/retrofitted/delete.dart';
+import 'package:gecssmns/screens/ebikes/desktop/retrofitted/update.dart';
+import 'package:gecssmns/screens/ebikes/desktop/retrofitted/view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -18,16 +18,16 @@ import 'package:loading_animations/loading_animations.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-class DeskBatteryDashboard extends StatefulWidget {
-  const DeskBatteryDashboard({super.key});
+class DeskRetrofittedDashboard extends StatefulWidget {
+  const DeskRetrofittedDashboard({super.key});
 
   @override
-  State<DeskBatteryDashboard> createState() => _DeskBatteryDashboardState();
+  State<DeskRetrofittedDashboard> createState() => _DeskRetrofittedDashboardState();
 }
 
-class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
+class _DeskRetrofittedDashboardState extends State<DeskRetrofittedDashboard> {
 
-  List<BatteryModel> _data=[];
+  List<MotorcycleRetro> _data=[];
   bool _isLoading = false;
 
   LocalStorage storage =  LocalStorage('usertoken');
@@ -88,7 +88,7 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
       _data = [];
       var baseur = AdsType.baseurl;
       var token = storage.getItem('token');
-      String url = '$baseur/v1/batteries';
+      String url = '$baseur/v1/motorbike_retro';
       List resp = json.decode((await http.get(Uri.parse(url),
         headers: {
             "Content-Type": "application/json",
@@ -96,7 +96,7 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
           }
        )).body);
       for (var element in resp) {
-        _data.add(BatteryModel.fromJson(element));
+        _data.add(MotorcycleRetro.fromJson(element));
       }
       setState(() {
         _isLoading = false;
@@ -130,7 +130,7 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
         _data = [];
       });
       var baseur = AdsType.baseurl;
-      String url = '$baseur/v1/battery/swap/search/${searchQueryController.text}';
+      String url = '$baseur/v1/motorbike_retro/search/${searchQueryController.text}';
       var token = storage.getItem('token');
       List resp = json.decode((
         await http.get(Uri.parse(url),
@@ -140,7 +140,7 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
         }
        )).body);
       for (var element in resp) {
-        _data.add(BatteryModel.fromJson(element));
+        _data.add(MotorcycleRetro.fromJson(element));
       }
 
       setState(() {
@@ -180,7 +180,7 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
         }
        )).body);
       for (var element in resp) {
-        _data.add(BatteryModel.fromJson(element));
+        _data.add(MotorcycleRetro.fromJson(element));
       }
 
       setState(() {
@@ -209,7 +209,7 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
         }
        )).body);
       for (var element in resp) {
-        _data.add(BatteryModel.fromJson(element));
+        _data.add(MotorcycleRetro.fromJson(element));
       }
 
       setState(() {
@@ -238,7 +238,7 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
         }
        )).body);
       for (var element in resp) {
-        _data.add(BatteryModel.fromJson(element));
+        _data.add(MotorcycleRetro.fromJson(element));
       }
 
       setState(() {
@@ -267,7 +267,7 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
         }
        )).body);
       for (var element in resp) {
-        _data.add(BatteryModel.fromJson(element));
+        _data.add(MotorcycleRetro.fromJson(element));
       }
 
       setState(() {
@@ -301,7 +301,7 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
        )).body);
 
       for (var element in resp) {
-        _data.add(BatteryModel.fromJson(element));
+        _data.add(MotorcycleRetro.fromJson(element));
       }
 
       setState(() {
@@ -341,7 +341,7 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
         )).body);
 
         for (var element in resp) {
-          _data.add(BatteryModel.fromJson(element));
+          _data.add(MotorcycleRetro.fromJson(element));
         }
 
         setState(() {
@@ -390,7 +390,7 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
                   Container(
                     padding:const EdgeInsets.fromLTRB(20, 10, 20, 10),
                     child: Row(children: [
-                      const Text("BATTERIES"),
+                      const Text("RETROFITTED E-BIKES"),
                       const SizedBox(width: 40,),
                 
                       Flexible(
@@ -431,7 +431,7 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
                                 //style: BorderStyle.solid, // Set border style (solid, dashed, etc.)
                               ),
                             ),
-                            labelText: 'Search by battery serial',
+                            labelText: 'Search by plate no, client, country...',
                             labelStyle:const TextStyle(fontSize: 12),
                             helperStyle: const TextStyle(color: Colors.white)
                           ),
@@ -473,6 +473,16 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
                         height: 30,
                         child: TextButton.icon(
                           onPressed: (){
+                            snackBar(
+                              context,
+                              title: 'Access denied',
+                              textColor: Colors.white,
+                              backgroundColor: Colors.red,
+                              elevation: 8,
+                              //shape: RoundedRectangleBorder(borderRadius: radius(30)),
+                              margin:const EdgeInsets.fromLTRB(200, 16, 100, 20),
+                              duration: 3.seconds,
+                            );
                           }, 
                           icon:Icon(Icons.download, size: 20, color: Theme.of(context).lightTextColor, ), 
                           label: Text('Pdf', style: TextStyle(fontSize: 16, color: Theme.of(context).lightTextColor,),),
@@ -493,174 +503,29 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
                         ),
                       ),
                 
-                      // ################################# AGENT START
                       SizedBox(
                         height: 30,
                         child: TextButton.icon(
                           onPressed: (){
-                              setState(() {
-                              _swapcenterTitle = "";
-                            });
-                            showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (BuildContext context){
-                                return StatefulBuilder(
-                                  builder: (BuildContext context, StateSetter setState) {
-                                    return AlertDialog(
-                                    elevation: 20.0,
-                                    alignment: Alignment.topCenter,
-                                    contentPadding: EdgeInsets.zero,
-                                    titlePadding: EdgeInsets.zero,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(2.0),
-                                        //side:const BorderSide(color: Colors.blue), // Border color
-                                      ), 
-                                    title: Container(
-                                      padding:const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                                      color: Theme.of(context).modalHeader,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            "FILTER BY SWAP CENTERS", style: TextStyle(
-                                              fontSize: 14,
-                                              color: Theme.of(context).modalHeaderTitle,
-                                          ),),
-                                          const Spacer(),
-                                  
-                                          IconButton(
-                                            onPressed: (){Navigator.of(context).pop();}, 
-                                            icon:const Icon(Icons.cancel_outlined, color: Colors.red, )
-                                          )
-                                        ],
-                                      )
-                                      ),
-                                  
-                                    content: Container(
-                                      color: Theme.of(context).secondaryBackground,
-                                      padding:const EdgeInsets.all(10),
-                                      height: 170,
-                                      width: 400,
-                                      child:Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                  
-                                        Text('Select Swap Center', style: TextStyle(
-                                          fontSize: 14,
-                                          color: Theme.of(context).headTextColor
-                                        ),),
-                                        const SizedBox(height: 5.0,),
-                                  
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Container(
-                                                padding:const EdgeInsets.only(left: 10, right: 10),
-                                                decoration: BoxDecoration(
-                                                  color: Theme.of(context).secondaryBackground,
-                                                  borderRadius: BorderRadius.circular(1.0), // Set border radius
-                                                  border: Border.all(
-                                                    color: Theme.of(context).btnBackground, // Set border color
-                                                    width: 1.0, // Set border width
-                                                  ),
-                                                ),
-                                                height: 35,
-                                                child: DropdownButton(
-                                                  dropdownColor: Theme.of(context).secondaryBackground,
-                                                  isExpanded: true,
-                                                  underline: Container(),
-                                                  hint:const Text('Select swap center'),
-                                                  items: swapCenters.map((item) {
-                                                    return DropdownMenuItem(
-                                                      value: item['title'].toString(),
-                                                      child: Text(item['title'].toString()),
-                                                      onTap: (){
-                                                        _swapcenterTitle = item['code'].toString();
-                                                      },
-                                                    );
-                                                  }).toList(),
-                                                  onChanged: (newVal) {
-                                                    setState(() {
-                                                      _swapcenterCode = newVal;
-                                                    });
-                                                  },
-                                                  value: _swapcenterCode,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                  
-                                        const SizedBox(height: 20,),
-                                  
-                                        Container(
-                                          margin: const EdgeInsets.only(top: 20),
-                                          child:Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              ElevatedButton(
-                                                onPressed: (){
-                                                  _getRecordbyAgent();
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor: Theme.of(context).btnBackground,
-                                                  padding:const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(1),
-                                                  ),
-                                                ),
-                                                child: Text('Pull Records', style: TextStyle(
-                                                  color: Theme.of(context).headTextColor
-                                                ),),
-                                                ),
-                                            ],
-                                          ),
-                                        )
-                                  
-                                  
-                                      ],
-                                    ),),
-                                  
-                                  );
-                                  }
-                                  
-                                );
-                              }
-                            );
-                          }, 
-                          icon: Icon(Icons.battery_2_bar_outlined, size: 20, color: Theme.of(context).lightTextColor,), 
-                          label: Text('Swap Centers', style: TextStyle(fontSize: 16, color: Theme.of(context).lightTextColor,),),
-                          style: ButtonStyle(  
-                            side: MaterialStateProperty.all(BorderSide(
-                              color: Theme.of(context).btnBackground, // Set the desired border color
-                              width: 1.0, // Set the desired border width
-                            )),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.0), // Set the desired border radius
-                              ),
-                            ),
-                            backgroundColor: MaterialStateProperty.all(
-                              Theme.of(context).secondaryBackground,
-                              )
-                          ),
-                        ),
-                      ),
-                      // ########################################## AGENT END
-                
-                      SizedBox(
-                        height: 30,
-                        child: TextButton.icon(
-                          onPressed: (){
-                            showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (BuildContext context){
-                                return CreateRecord(
-                                  refreshUpdatedRecord: getRecordOnLoad,
-                                  swapCenters: swapCenters,
-                                );
-                              }
+                            // showDialog(
+                            //   barrierDismissible: false,
+                            //   context: context,
+                            //   builder: (BuildContext context){
+                            //     return CreateRecord(
+                            //       refreshUpdatedRecord: getRecordOnLoad,
+                            //       swapCenters: swapCenters,
+                            //     );
+                            //   }
+                            // );
+                            snackBar(
+                              context,
+                              title: 'Access denied',
+                              textColor: Colors.white,
+                              backgroundColor: Colors.red,
+                              elevation: 8,
+                              //shape: RoundedRectangleBorder(borderRadius: radius(30)),
+                              margin:const EdgeInsets.fromLTRB(200, 16, 100, 20),
+                              duration: 3.seconds,
                             );
                           }, 
                           icon: Icon(Icons.add , size: 20, color: Theme.of(context).lightTextColor), 
@@ -743,13 +608,14 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
                               )) ,
                             columns:const [
                               DataColumn(label: Text('#')),
-                              DataColumn(label: Text('Serial')),
-                              DataColumn(label: Text('Capacity')),
-                              DataColumn(label: Text('P.Price(USD)')),
-                              DataColumn(label: Text('Swap Center')),
-                              DataColumn(label: Text('Model')),
+                              DataColumn(label: Text('Client')),
+                              DataColumn(label: Text('Country')),
+                              DataColumn(label: Text('C.Phone')),
+                              DataColumn(label: Text('Ebike No.')),
+                              DataColumn(label: Text('Engine No.')),
+                              DataColumn(label: Text('Chassis No')),
                               DataColumn(label: Text('Make')),
-                              DataColumn(label: Text('E.SOH')),
+                              DataColumn(label: Text('Model')),
                               DataColumn(label: Text('Status')),
                               DataColumn(label: Text('Dep.date')),
                               DataColumn(label: Text('Action')),
@@ -760,37 +626,41 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
                                 DataCell(SizedBox( 
                                   width: 30.0, 
                                   child: Text("${index + 1 }"))),
-                                DataCell(Text(_data[index].code.toString(), )),
-                                DataCell(Text(_data[index].batteryCapacity.toString(), )),
-                                DataCell(Text(_data[index].purchasePrice.toString(), )),
+                                DataCell(Text(_data[index].client.toString(), )),
+                                DataCell(Text(_data[index].country.toString(), )),
+                                DataCell(Text(_data[index].clientPhone.toString(), )),
+                                DataCell(Text(_data[index].numberPlate.toString(), )),
                                 DataCell(
                                   SizedBox(
-                                    width: 80.0,
-                                    child: Text(_data[index].location.toString(), 
+                                    width: 100.0,
+                                    child: Text(_data[index].engineNo.toString(), 
                                     maxLines: 1, overflow: TextOverflow.ellipsis, ),
                                   )
                                 ),
-                                DataCell(Text(_data[index].model.toString() )),
                                 DataCell(
                                   SizedBox(
-                                    width: 90.0,
-                                    child: Text(_data[index].make.toString(), 
+                                    width: 100.0,
+                                    child: Text(_data[index].chassisNo.toString(), 
                                     maxLines: 1, overflow: TextOverflow.ellipsis, ),
                                   )
                                 ),
-                                DataCell(Text( _data[index].estimatedSoh.toString() )),
+                                DataCell(
+                                  Text(_data[index].make.toString(), 
+                                  maxLines: 1, overflow: TextOverflow.ellipsis, )
+                                ),
+                                DataCell(Text( _data[index].model.toString() )),
                                 DataCell(
                                   Container(
                                     width: 80.0,
                                     padding:const EdgeInsets.only(top: 2, bottom: 2),
-                                    color: _data[index].status == 'Issued' ? Colors.green :  _data[index].status == 'Charged' ? Colors.blue : Colors.orange,
+                                    color: _data[index].status == 'Active' ? Colors.green :  _data[index].status == 'Charged' ? Colors.blue : Colors.orange,
                                     child:Text(_data[index].status.toString(),
                                     textAlign: TextAlign.center,
                                     style:const TextStyle(color:Colors.white ),
                                     ),
                                   )),
 
-                                DataCell(Text(_data[index].deploymentDate.toString()) ),
+                                DataCell(Text(_data[index].createdAt.toString()) ),
                                             
                                 DataCell(
                                   Row(children: [
@@ -834,16 +704,16 @@ class _DeskBatteryDashboardState extends State<DeskBatteryDashboard> {
                                     const SizedBox(width: 10,),
                                     InkWell(
                                       onTap: (){
-                                        // showDialog(
-                                        //     barrierDismissible: false,
-                                        //     context: context,
-                                        //     builder: (BuildContext context){
-                                        //       return RecordDelete(
-                                        //         recordData: _data[index],
-                                        //         refreshUpdatedRecord: getRecordOnLoad,
-                                        //       );
-                                        //     }
-                                        //   );
+                                        showDialog(
+                                            barrierDismissible: false,
+                                            context: context,
+                                            builder: (BuildContext context){
+                                              return RecordDelete(
+                                                recordData: _data[index],
+                                                refreshUpdatedRecord: getRecordOnLoad,
+                                              );
+                                            }
+                                          );
                                       },
                                       child: Container(
                                         padding:const EdgeInsets.fromLTRB(10, 3, 10, 3),

@@ -8,22 +8,23 @@ import 'package:gecssmns/widgets/statistics_totals_card.dart';
 import 'package:http/http.dart' as http;
 import 'package:localstorage/localstorage.dart';
 
-class StatisticsCard extends StatefulWidget {
-  const StatisticsCard({Key? key}) : super(key: key);
+class BatteryStatistics extends StatefulWidget {
+  const BatteryStatistics({Key? key}) : super(key: key);
 
   @override
-  State<StatisticsCard> createState() => _StatisticsCardState();
+  State<BatteryStatistics> createState() => _BatteryStatisticsState();
 }
 
-class _StatisticsCardState extends State<StatisticsCard> {
+class _BatteryStatisticsState extends State<BatteryStatistics> {
   LocalStorage storage = LocalStorage('usertoken');
 
   bool _cardLoading = true;
 
-  double earnings = 0;
-  int batteries = 0;
-  int bikes = 0;
-  int staff = 0;
+  int today = 0;
+  int week = 0;
+  int month = 0;
+  int year = 0;
+  int totals = 0;
 
     @override
   void initState() {
@@ -36,8 +37,9 @@ class _StatisticsCardState extends State<StatisticsCard> {
     setState(() {
        _cardLoading = true;
     });
-    String url = '$baseur/v1/statistics/totals';
+    String url = '$baseur/v1/reports/battery_statistics/counts';
     var token = storage.getItem('token');
+
     final response = await http.get(Uri.parse(url),
             headers: {
               "Content-Type": "application/json",
@@ -50,10 +52,11 @@ class _StatisticsCardState extends State<StatisticsCard> {
       });
       var data = json.decode(response.body);
       setState(() {
-        earnings = data['earnings'];
-        batteries = data['batteries'];
-        bikes = data['bikes'];
-        staff = data['staff'];
+        today = data['today'];
+        week = data['week'];
+        year = data['year'];
+        month = data['month'];
+        totals = data['total'];
       });
     } else {
       setState(() {
@@ -80,35 +83,35 @@ class _StatisticsCardState extends State<StatisticsCard> {
         children: [
 
           StatisticTotalsCard(
-            title: 'Total Batteries: ', 
-            totals: batteries, 
+            title: 'Today Swaps: ', 
+            totals: today, 
             iconColor:const Color(0xFF2697FF), 
             iconColorbg:const Color(0xFF2697FF).withOpacity(0.2), 
-            iconType: FontAwesomeIcons.carBattery
+            iconType: FontAwesomeIcons.chargingStation
             ),
           
           StatisticTotalsCard(
-            title: 'Total Motorcycles:  ', 
-            totals: bikes, 
+            title: 'This week swaps:  ', 
+            totals: week, 
             iconColor:const Color(0xFFFFA113), 
             iconColorbg:const Color(0xFFFFA113).withOpacity(0.2), 
-            iconType: FontAwesomeIcons.motorcycle
+            iconType: FontAwesomeIcons.chargingStation
             ),
 
           StatisticTotalsCard(
-            title: 'Swap Stations ', 
-            totals: staff, 
+            title: 'This month swaps', 
+            totals: month, 
             iconColor:const Color(0xFF2697FF), 
             iconColorbg:const Color(0xFF2697FF).withOpacity(0.2), 
             iconType: FontAwesomeIcons.chargingStation
             ),
 
           StatisticTotalsCard(
-            title: 'Total Earnings', 
-            totals: earnings.toInt(), 
+            title: 'This Year swaps', 
+            totals: year, 
             iconColor:const Color(0xFFEC7063), 
             iconColorbg:const Color(0xFFEC7063).withOpacity(0.2), 
-            iconType: FontAwesomeIcons.cashRegister
+            iconType: FontAwesomeIcons.chargingStation
             ),
 
         ],

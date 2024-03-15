@@ -39,12 +39,13 @@ class _ThisYearColumnChartState extends State<ThisYearColumnChart> {
 
   void fetchDataFromApi() async {
     var baseur = AdsType.baseurl;
-    //var token = storage.getItem('token');
+    var token = storage.getItem('token');
     String url = '$baseur/v1/reports/overall_statistics_year';
     try {
       final response = await http.get(Uri.parse(url),
             headers: {
-              "Content-Type": "application/json"
+              "Content-Type": "application/json",
+              'Authorization': "token $token",
             },);
 
       if (response.statusCode == 200) {

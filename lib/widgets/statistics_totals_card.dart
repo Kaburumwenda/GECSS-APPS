@@ -32,7 +32,7 @@ class StatisticTotalsCard extends StatelessWidget {
       height: 40,
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
       decoration: BoxDecoration(
-        color: Theme.of(context).secondaryBackground,
+        color:iconColor, //Theme.of(context).secondaryBackground,
         borderRadius: const BorderRadius.all(Radius.circular(5)),
       ),
       child: Column(
@@ -43,11 +43,12 @@ class StatisticTotalsCard extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color:iconColorbg,
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                decoration:const BoxDecoration(
+                  color: Colors.white ,//iconColorbg,
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
-                child:  FaIcon(iconType, size: 15, color: iconColor, ),
+                child:  FaIcon(iconType, size: 15, color: iconColor, 
+                ),
               ),
               //Icon(Icons.more_vert, color: Theme.of(context).colorScheme.onSecondary )
             ],
@@ -59,15 +60,16 @@ class StatisticTotalsCard extends StatelessWidget {
           Text(
           title,
           style: GoogleFonts.teko(textStyle: TextStyle(
-          color: Theme.of(context).lightTextColor,
+          color: Theme.of(context).headTextColor,
           letterSpacing: 1.0,
           fontSize: 16
         )),
         ),
         const Spacer(),
         Text(formatter.format(totals), style: GoogleFonts.teko(textStyle: TextStyle(
-          color: const Color(0xFF1ccaa7).withOpacity(0.6),
-          fontSize: 20
+          color: Theme.of(context).headTextColor, //const Color(0xFF1ccaa7).withOpacity(0.6),
+          fontSize: 20,
+          fontWeight: FontWeight.bold
         )) ),
         const SizedBox(width: 10,)
         ],),

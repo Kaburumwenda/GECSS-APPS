@@ -6,7 +6,7 @@ import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gecssmns/Apis/base_url.dart';
-import 'package:gecssmns/Models/battery.dart';
+import 'package:gecssmns/Models/new_bikes.dart';
 import 'package:gecssmns/main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:localstorage/localstorage.dart';
@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 import 'package:nb_utils/nb_utils.dart';
 
 class RecordUpdate extends StatefulWidget {
-  final BatteryModel recordData;
+  final NewMotobikes recordData;
   final Function refreshUpdatedRecord;
   final List swapCenters;
   const RecordUpdate({ 
@@ -29,57 +29,31 @@ class RecordUpdate extends StatefulWidget {
 
 class _RecordUpdateState extends State<RecordUpdate> {
   LocalStorage storage =  LocalStorage('usertoken');
-  DateTime? _deploymentDate;
   DateTime? _conditionDate;
 
-  TextEditingController  _purchaseCurrency = TextEditingController();
-  TextEditingController  _serialController = TextEditingController();
-  TextEditingController  _capacityController = TextEditingController();
-  TextEditingController  _purchasePrice  = TextEditingController();
+
+  TextEditingController  _numberplateController = TextEditingController();
+  TextEditingController  _chassisnoController = TextEditingController(); 
+  TextEditingController  _colorController  = TextEditingController();
+  TextEditingController  _motornoController  = TextEditingController();
   TextEditingController  _modelController = TextEditingController();
   TextEditingController  _makeController = TextEditingController();
-  TextEditingController  _productionYear = TextEditingController();
-  TextEditingController  _deploymentDateController = TextEditingController();
-  TextEditingController  _estimatedSoh = TextEditingController();
+  TextEditingController  _clientController = TextEditingController();
+  TextEditingController  _clientphoneController = TextEditingController();
+  TextEditingController  _countryController = TextEditingController();
+  TextEditingController  _conditionController = TextEditingController();
   TextEditingController  _conditionDateController = TextEditingController();
   TextEditingController  _remarksController = TextEditingController();
 
 
-  var _swapCenterTitle;
-  var _batteryStatusTitle;
-  var _batteryConditionTitle;
+  var _ebikeStatusTitle;
 
-  List _batteryStatus = [
+  List _ebikeStatus = [
     {
-      "title":"Issued"
+      "title":"Active"
     },
     {
-      "title":"Depleted"
-    },
-    {
-      "title":"Charged"
-    },
-    {
-      "title":"Charging"
-    },
-    {
-      "title":"In Store"
-    },
-  ];
-
-
-  List _batteryCondition = [
-    {
-      "title":"Healthy"
-    },
-    {
-      "title":"Repaired & Healthy"
-    },
-    {
-      "title":"Malfunction"
-    },
-    {
-      "title":"Out of Service"
+      "title":"Reprocessed"
     },
     {
       "title":"Others"
@@ -87,24 +61,26 @@ class _RecordUpdateState extends State<RecordUpdate> {
   ];
 
 
+
+
+
   @override
   void initState() {
     super.initState();
     setState(() {
-      _serialController.text = widget.recordData.code.toString();
-      _swapCenterTitle = widget.recordData.location;
-      _batteryStatusTitle = widget.recordData.status;
-      _batteryConditionTitle = widget.recordData.batteryCondition;
-      _capacityController.text = widget.recordData.batteryCapacity.toString();
-      _purchaseCurrency.text = widget.recordData.purchasePriceCurrency.toString();
-      _purchasePrice.text = widget.recordData.purchasePrice.toString();
+      _numberplateController.text = widget.recordData.numberplate.toString();
+      _chassisnoController.text = widget.recordData.chassisNo.toString();
+      _colorController.text = widget.recordData.color.toString();
+      _motornoController.text = widget.recordData.motorNo.toString();
       _modelController.text = widget.recordData.model.toString();
       _makeController.text = widget.recordData.make.toString();
-      _productionYear.text = widget.recordData.productionYear.toString();
-      _deploymentDateController.text = widget.recordData.deploymentDate.toString();
-      _conditionDateController.text = widget.recordData.batteryConditionDate.toString();
-      _estimatedSoh.text = widget.recordData.estimatedSoh.toString();
+      _clientController.text = widget.recordData.client.toString();
+      _clientphoneController.text = widget.recordData.clientPhone.toString();
+      _countryController.text = widget.recordData.country.toString();
+      _conditionController.text = widget.recordData.condition.toString();
+      _conditionDateController.text = widget.recordData.conditionDate.toString();
       _remarksController.text = widget.recordData.remarks.toString();
+      _ebikeStatusTitle = widget.recordData.status;
     });
   }
 
@@ -115,12 +91,12 @@ class _RecordUpdateState extends State<RecordUpdate> {
 
   _updateRecord() async {
       
-      if(_serialController.text.length >= 14){
+      if(_chassisnoController.text.length >= 10){
         if(mounted){
           Navigator.of(context).pop();
         }
         var baseur = AdsType.baseurl;
-        String url = '$baseur/v1/battery/update/${widget.recordData.id}';
+        String url = '$baseur/v1/motorbike/update/${widget.recordData.id}';
         var token = storage.getItem('token');
         var resp = 
           await http.post(Uri.parse(url),
@@ -128,20 +104,19 @@ class _RecordUpdateState extends State<RecordUpdate> {
             'Authorization': "token $token",
           },
           body:{
-            'location': _swapCenterTitle,
-            'code': _serialController.text,
-            'status': _batteryStatusTitle,
-            'battery_capacity':_capacityController.text,
-            'purchase_price_currency':_purchaseCurrency.text,
-            'purchase_price': _purchasePrice.text,
+            'numberplate': _numberplateController.text,
+            'chassis_no': _chassisnoController.text,
+            'color':_colorController.text,
+            'motor_no':_motornoController.text,
             'model': _modelController.text,
             'make': _makeController.text,
-            'production_year': _productionYear.text,
-            'deployment_date': _deploymentDateController.text,
-            'battery_condition_date': _conditionDateController.text,
-            'estimated_soh': _estimatedSoh.text,
-            'battery_condition': _batteryConditionTitle,
+            'client': _clientController.text,
+            'client_phone': _clientphoneController.text,
+            'country': _countryController.text,
+            'condition': _conditionController.text,
+            'condition_date': _conditionDateController.text,
             'remarks': _remarksController.text,
+            'status': _ebikeStatusTitle,
           }
         );
 
@@ -190,23 +165,8 @@ class _RecordUpdateState extends State<RecordUpdate> {
   }
 
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2021),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != _deploymentDate) {
-      setState(() {
-        _deploymentDate = picked;
-         _deploymentDateController.text = "${picked.toLocal()}".split(' ')[0];
-      });
-    }
-  }
 
-
-  Future<void> _batteryConditionDate(BuildContext context) async {
+  Future<void> _ebikeConditionDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -239,7 +199,7 @@ class _RecordUpdateState extends State<RecordUpdate> {
         child: Row(
           children: [
             Text(
-              "UPDATE BATTERY DETAILS", style: TextStyle(
+              "UPDATE EBIKE DETAILS", style: TextStyle(
                 fontSize: 14,
                 color: Theme.of(context).modalHeaderTitle,
             ),),
@@ -256,7 +216,7 @@ class _RecordUpdateState extends State<RecordUpdate> {
       content: Container(
         padding:const EdgeInsets.all(10),
         color: Theme.of(context).secondaryBackground,
-        height: 480,
+        height: 540,
         width: 800,
         child:Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -268,7 +228,7 @@ class _RecordUpdateState extends State<RecordUpdate> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              Text('Battery Serial', style: TextStyle(
+              Text('Plate Number', style: TextStyle(
                 fontSize: 14,
                 color: Theme.of(context).headTextColor
               ),),
@@ -279,7 +239,7 @@ class _RecordUpdateState extends State<RecordUpdate> {
                   child: SizedBox(
                     height: 32,
                     child: TextFormField(
-                    controller: _serialController,
+                   controller: _numberplateController,
                     style: GoogleFonts.lato(textStyle: TextStyle(
                       fontSize: 14.0, 
                       color: Theme.of(context).lightTextColor,
@@ -317,7 +277,7 @@ class _RecordUpdateState extends State<RecordUpdate> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              Text('Capacity', style: TextStyle(
+              Text('Chassis Number', style: TextStyle(
                 fontSize: 14,
                 color: Theme.of(context).headTextColor
               ),),
@@ -328,7 +288,7 @@ class _RecordUpdateState extends State<RecordUpdate> {
                   child: SizedBox(
                     height: 32,
                     child: TextFormField(
-                    controller: _capacityController,
+                    controller: _chassisnoController,
                     style: GoogleFonts.lato(textStyle: TextStyle(
                       fontSize: 14.0, 
                       color: Theme.of(context).lightTextColor,
@@ -366,7 +326,7 @@ class _RecordUpdateState extends State<RecordUpdate> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              Text('Purchase currency', style: TextStyle(
+              Text('Engine No.', style: TextStyle(
                 fontSize: 14,
                 color: Theme.of(context).headTextColor
               ),),
@@ -377,56 +337,7 @@ class _RecordUpdateState extends State<RecordUpdate> {
                   child: SizedBox(
                     height: 32,
                     child: TextFormField(
-                    controller: _purchaseCurrency,
-                    style: GoogleFonts.lato(textStyle: TextStyle(
-                      fontSize: 14.0, 
-                      color: Theme.of(context).lightTextColor,
-                      height: 1.0,
-                    )),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Theme.of(context).secondaryBackground,
-                      contentPadding:const EdgeInsets.only(left: 10, right: 10),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:BorderSide(
-                          color: Theme.of(context).btnBackground, // Set border color
-                          width: 1.0,         // Set border width
-                          //style: BorderStyle.solid, // Set border style (solid, dashed, etc.)
-                        ),
-                      ),
-                      focusedBorder:const OutlineInputBorder(
-                        borderSide:BorderSide(
-                          color: Colors.blue, // Set border color
-                          width: 1.0,         // Set border width
-                          //style: BorderStyle.solid, // Set border style (solid, dashed, etc.)
-                        ),
-                      ),
-                    ),
-                                    
-                    ),
-                  ),
-                  ),
-              ],),
-              ],),
-            ),
-            const SizedBox(width: 20,),
-
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-              Text('Purchase Price.', style: TextStyle(
-                fontSize: 14,
-                color: Theme.of(context).headTextColor
-              ),),
-              const SizedBox(height: 5,),
-              Row(
-              children: [
-                Flexible(
-                  child: SizedBox(
-                    height: 32,
-                    child: TextFormField(
-                    controller: _purchasePrice,
+                    controller: _colorController,
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.digitsOnly
@@ -473,47 +384,47 @@ class _RecordUpdateState extends State<RecordUpdate> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              Text('Swap Center', style: TextStyle(
+              Text('Motor No.', style: TextStyle(
                 fontSize: 14,
                 color: Theme.of(context).headTextColor
               ),),
               const SizedBox(height: 5,),
               Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding:const EdgeInsets.only(left: 10, right: 10),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(1.0), // Set border radius
-                        border: Border.all(
+              children: [
+                Flexible(
+                  child: SizedBox(
+                    height: 32,
+                    child: TextFormField(
+                    controller: _motornoController,
+                    style: GoogleFonts.lato(textStyle: TextStyle(
+                      fontSize: 14.0, 
+                      color: Theme.of(context).lightTextColor,
+                      height: 1.0,
+                    )),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Theme.of(context).secondaryBackground,
+                      contentPadding:const EdgeInsets.only(left: 10, right: 10),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:BorderSide(
                           color: Theme.of(context).btnBackground, // Set border color
-                          width: 1.0, // Set border width
+                          width: 1.0,         // Set border width
+                          //style: BorderStyle.solid, // Set border style (solid, dashed, etc.)
                         ),
                       ),
-                      height: 35,
-                      child: DropdownButton(
-                        dropdownColor: Theme.of(context).secondaryBackground,
-                        isExpanded: true,
-                        underline: Container(),
-                        hint: Text(_swapCenterTitle.toString()),
-                        items: widget.swapCenters.map((item) {
-                          return DropdownMenuItem(
-                            value: item['title'].toString(),
-                            child: Text(item['title'].toString()),
-                          );
-                        }).toList(),
-                        onChanged: (newVal) {
-                          setState(() {
-                            _swapCenterTitle = newVal;
-                          });
-                        },
-                        value: _swapCenterTitle,
+                      focusedBorder:const OutlineInputBorder(
+                        borderSide:BorderSide(
+                          color: Colors.blue, // Set border color
+                          width: 1.0,         // Set border width
+                          //style: BorderStyle.solid, // Set border style (solid, dashed, etc.)
+                        ),
                       ),
                     ),
+                                    
+                    ),
                   ),
-                ],
-              ),
+                  ),
+              ],),
               ],),
             ),
             const SizedBox(width: 20,),
@@ -625,7 +536,7 @@ class _RecordUpdateState extends State<RecordUpdate> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              Text('Production Year', style: TextStyle(
+              Text('Client', style: TextStyle(
                 fontSize: 14,
                 color: Theme.of(context).headTextColor
               ),),
@@ -636,7 +547,159 @@ class _RecordUpdateState extends State<RecordUpdate> {
                   child: SizedBox(
                     height: 32,
                     child: TextFormField(
-                    controller: _productionYear,
+                    controller: _clientController,
+                    style: GoogleFonts.lato(textStyle: TextStyle(
+                      fontSize: 14.0, 
+                      color: Theme.of(context).lightTextColor,
+                      height: 1.0,
+                    )),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Theme.of(context).secondaryBackground,
+                      contentPadding:const EdgeInsets.only(left: 10, right: 10),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:BorderSide(
+                          color: Theme.of(context).btnBackground, // Set border color
+                          width: 1.0,         // Set border width
+                          //style: BorderStyle.solid, // Set border style (solid, dashed, etc.)
+                        ),
+                      ),
+                      focusedBorder:const OutlineInputBorder(
+                        borderSide:BorderSide(
+                          color: Colors.blue, // Set border color
+                          width: 1.0,         // Set border width
+                          //style: BorderStyle.solid, // Set border style (solid, dashed, etc.)
+                        ),
+                      ),
+                    ),
+                                    
+                    ),
+                  ),
+                  ),
+              ],),
+              ],),
+            ),
+            const SizedBox(width: 20,),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+              Text('Client Country', style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).headTextColor
+              ),),
+              const SizedBox(height: 5,),
+              Row(
+              children: [
+                Flexible(
+                  child: SizedBox(
+                    height: 32,
+                    child: TextFormField(
+                    controller: _countryController,
+                    style: GoogleFonts.lato(textStyle: TextStyle(
+                      fontSize: 14.0, 
+                      color: Theme.of(context).lightTextColor,
+                      height: 1.0,
+                    )),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Theme.of(context).secondaryBackground,
+                      contentPadding:const EdgeInsets.only(left: 10, right: 10),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:BorderSide(
+                          color: Theme.of(context).btnBackground, // Set border color
+                          width: 1.0,         // Set border width
+                          //style: BorderStyle.solid, // Set border style (solid, dashed, etc.)
+                        ),
+                      ),
+                      focusedBorder:const OutlineInputBorder(
+                        borderSide:BorderSide(
+                          color: Colors.blue, // Set border color
+                          width: 1.0,         // Set border width
+                          //style: BorderStyle.solid, // Set border style (solid, dashed, etc.)
+                        ),
+                      ),
+                    ),
+                                    
+                    ),
+                  ),
+                  ),
+              ],),
+              ],),
+            ),
+            const SizedBox(width: 20,),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+              Text('Client Phone', style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).headTextColor
+              ),),
+              const SizedBox(height: 5,),
+              Row(
+              children: [
+                Flexible(
+                  child: SizedBox(
+                    height: 32,
+                    child: TextFormField(
+                    controller: _clientphoneController,
+                    style: GoogleFonts.lato(textStyle: TextStyle(
+                      fontSize: 14.0, 
+                      color: Theme.of(context).lightTextColor,
+                      height: 1.0,
+                    )),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Theme.of(context).secondaryBackground,
+                      contentPadding:const EdgeInsets.only(left: 10, right: 10),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:BorderSide(
+                          color: Theme.of(context).btnBackground, // Set border color
+                          width: 1.0,         // Set border width
+                          //style: BorderStyle.solid, // Set border style (solid, dashed, etc.)
+                        ),
+                      ),
+                      focusedBorder:const OutlineInputBorder(
+                        borderSide:BorderSide(
+                          color: Colors.blue, // Set border color
+                          width: 1.0,         // Set border width
+                          //style: BorderStyle.solid, // Set border style (solid, dashed, etc.)
+                        ),
+                      ),
+                    ),
+                                    
+                    ),
+                  ),
+                  ),
+              ],),
+              ],),
+            ),
+
+            ],),
+            const SizedBox(height: 20,),
+
+
+            Row(children: [
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+              Text('Ebike Condition', style: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).headTextColor
+              ),),
+              const SizedBox(height: 5,),
+              Row(
+              children: [
+                Flexible(
+                  child: SizedBox(
+                    height: 32,
+                    child: TextFormField(
+                    controller: _conditionController,
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.digitsOnly
@@ -678,7 +741,7 @@ class _RecordUpdateState extends State<RecordUpdate> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              Text('Deployment Date', style: TextStyle(
+              Text('Condition Date', style: TextStyle(
                 fontSize: 14,
                 color: Theme.of(context).headTextColor
               ),),
@@ -696,7 +759,7 @@ class _RecordUpdateState extends State<RecordUpdate> {
                       color: Colors.white70,
                       height: 1.0,
                     ),
-                    controller: _deploymentDateController,
+                   controller: _conditionDateController,
                     readOnly: true,
                     decoration: InputDecoration(
                       filled: true,
@@ -719,7 +782,7 @@ class _RecordUpdateState extends State<RecordUpdate> {
                       helperStyle: const TextStyle(color: Colors.white),
                       suffixIcon: IconButton(
                         icon:const Icon(Icons.calendar_today, size: 20,),
-                        onPressed: () => _selectDate(context),
+                        onPressed: () => _ebikeConditionDate(context),
                       ),
                     ),
                                     
@@ -735,61 +798,7 @@ class _RecordUpdateState extends State<RecordUpdate> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              Text('Estimated SOH', style: TextStyle(
-                fontSize: 14,
-                color: Theme.of(context).headTextColor
-              ),),
-              const SizedBox(height: 5,),
-              Row(
-              children: [
-                Flexible(
-                  child: SizedBox(
-                    height: 32,
-                    child: TextFormField(
-                    controller: _estimatedSoh,
-                    style: GoogleFonts.lato(textStyle: TextStyle(
-                      fontSize: 14.0, 
-                      color: Theme.of(context).lightTextColor,
-                      height: 1.0,
-                    )),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Theme.of(context).secondaryBackground,
-                      contentPadding:const EdgeInsets.only(left: 10, right: 10),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:BorderSide(
-                          color: Theme.of(context).btnBackground, // Set border color
-                          width: 1.0,         // Set border width
-                          //style: BorderStyle.solid, // Set border style (solid, dashed, etc.)
-                        ),
-                      ),
-                      focusedBorder:const OutlineInputBorder(
-                        borderSide:BorderSide(
-                          color: Colors.blue, // Set border color
-                          width: 1.0,         // Set border width
-                          //style: BorderStyle.solid, // Set border style (solid, dashed, etc.)
-                        ),
-                      ),
-                    ),
-                                    
-                    ),
-                  ),
-                  ),
-              ],),
-              ],),
-            ),
-            
-            ],),
-            const SizedBox(height: 20,),
-
-
-            Row(children: [
-
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-              Text('Battery Condition', style: TextStyle(
+              Text('Ebike Status', style: TextStyle(
                 fontSize: 14,
                 color: Theme.of(context).headTextColor
               ),),
@@ -812,8 +821,8 @@ class _RecordUpdateState extends State<RecordUpdate> {
                         dropdownColor: Theme.of(context).secondaryBackground,
                         isExpanded: true,
                         underline: Container(),
-                        hint: Text(_batteryConditionTitle.toString()),
-                        items: _batteryCondition.map((item) {
+                        hint: Text(_ebikeStatusTitle.toString()),
+                        items: _ebikeStatus.map((item) {
                           return DropdownMenuItem(
                             value: item['title'].toString(),
                             child: Text(item['title'].toString()),
@@ -821,116 +830,10 @@ class _RecordUpdateState extends State<RecordUpdate> {
                         }).toList(),
                         onChanged: (newVal) {
                           setState(() {
-                            _batteryConditionTitle = newVal;
+                            _ebikeStatusTitle = newVal;
                           });
                         },
-                        value: _batteryConditionTitle,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              ],),
-            ),
-            const SizedBox(width: 20,),
-
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-              Text('Battery Condition Date', style: TextStyle(
-                fontSize: 14,
-                color: Theme.of(context).headTextColor
-              ),),
-              const SizedBox(height: 5,),
-              Row(
-              children: [
-                Flexible(
-                  child: SizedBox(
-                    //width: 200,
-                    height: 35,
-                    child: TextFormField(
-                    //autofocus: true,
-                    style:const TextStyle(
-                      fontSize: 16.0, 
-                      color: Colors.white70,
-                      height: 1.0,
-                    ),
-                    controller: _conditionDateController,
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Theme.of(context).secondaryBackground,
-                      contentPadding:const EdgeInsets.only(left: 10, right: 10),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:BorderSide(
-                          color: Theme.of(context).btnBackground, // Set border color
-                          width: 1.0, 
-                        ),
-                      ),
-                      focusedBorder:const OutlineInputBorder(
-                        borderSide:BorderSide(
-                          color: Colors.blue, // Set border color
-                          width: 1.0, 
-                        ),
-                      ),
-                      //labelText: 'Select start date...',
-                      labelStyle:const TextStyle(fontSize: 12),
-                      helperStyle: const TextStyle(color: Colors.white),
-                      suffixIcon: IconButton(
-                        icon:const Icon(Icons.calendar_today, size: 20,),
-                        onPressed: () => _batteryConditionDate(context),
-                      ),
-                    ),
-                                    
-                    ),
-                  ),
-                  ),
-              ],),
-              ],),
-            ),
-            const SizedBox(width: 20,),
-
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-              Text('Battery Status', style: TextStyle(
-                fontSize: 14,
-                color: Theme.of(context).headTextColor
-              ),),
-              const SizedBox(height: 5,),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding:const EdgeInsets.only(left: 10, right: 10),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(1.0), // Set border radius
-                        border: Border.all(
-                          color: Theme.of(context).btnBackground, // Set border color
-                          width: 1.0, // Set border width
-                        ),
-                      ),
-                      height: 35,
-                      child: DropdownButton(
-                        dropdownColor: Theme.of(context).secondaryBackground,
-                        isExpanded: true,
-                        underline: Container(),
-                        hint: Text(_batteryStatusTitle.toString()),
-                        items: _batteryStatus.map((item) {
-                          return DropdownMenuItem(
-                            value: item['title'].toString(),
-                            child: Text(item['title'].toString()),
-                          );
-                        }).toList(),
-                        onChanged: (newVal) {
-                          setState(() {
-                            _batteryStatusTitle = newVal;
-                          });
-                        },
-                        value: _batteryStatusTitle,
+                        value: _ebikeStatusTitle,
                       ),
                     ),
                   ),
@@ -942,13 +845,15 @@ class _RecordUpdateState extends State<RecordUpdate> {
             ],),
             const SizedBox(height: 20,),
 
+
+
             Row(children: [
 
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              Text('Battery Remarks', style: TextStyle(
+              Text('Remarks', style: TextStyle(
                 fontSize: 14,
                 color: Theme.of(context).headTextColor
               ),),

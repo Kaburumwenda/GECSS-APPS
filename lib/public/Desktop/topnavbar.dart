@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gecssmns/appPreferences/app_preferences.dart';
 import 'package:gecssmns/main.dart';
+import 'package:gecssmns/screens/Auth/desktop_login.dart';
 import 'package:get/get.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class DesktopTopNav extends StatelessWidget {
   const DesktopTopNav({super.key});
@@ -16,9 +18,11 @@ class DesktopTopNav extends StatelessWidget {
           const Spacer(),
 
           ElevatedButton.icon(
-            onPressed: (){}, 
+            onPressed: (){
+              const DesktopLoginScreen().launch(context);
+            }, 
             icon:Icon(Icons.person, color: Theme.of(context).lightTextColor,), 
-            label:const Text(""),
+            label:const Text("Logout"),
             style: IconButton.styleFrom(
               backgroundColor:Theme.of(context).primaryBackground,
               padding:const EdgeInsets.symmetric(horizontal: 5, vertical: 5),

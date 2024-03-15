@@ -30,8 +30,8 @@ class _DesktopDashboardState extends State<DesktopDashboard> {
       backgroundColor: Theme.of(context).primaryBackground,
       body: Row(
         children: [
-          SizedBox(
-            //color: Theme.of(context).secondaryBackground,
+          Container(
+            color: Theme.of(context).secondaryBackground,
             height: double.infinity,
             width: MediaQuery.of(context).size.width * .12,
             child:const DesktopSidebar(),
@@ -44,9 +44,15 @@ class _DesktopDashboardState extends State<DesktopDashboard> {
             child: Column(
               children: [
                 
-                const DesktopTopNav(),
+                Container(
+                  color: Theme.of(context).secondaryBackground,
+                  child: const DesktopTopNav()),
 
-                const StatisticsCard(),
+                Container(
+                  color: Theme.of(context).secondaryBackground,
+                  child: const StatisticsCard()),
+                
+                const SizedBox(height: 10,),
 
                 Expanded(
                   child: Container(
